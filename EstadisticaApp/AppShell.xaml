@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="EstadisticaApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:EstadisticaApp.Pages">
+
+    <!--<ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />-->
+    <Shell.FlyoutHeader>
+        <Grid HeightRequest="100"
+              BackgroundColor="Aqua">
+            <Image Source="monitor.png" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <FlyoutItem Title="Estadistica Descriptiva"
+                Icon="monitor.png">
+        <ShellContent Title="Data"
+                      Icon="stats.png"
+                      ContentTemplate="{DataTemplate local:DataEntry}" />
+        <ShellContent Title="Resultados"
+                      Icon="dashboard.png"
+                      ContentTemplate="{DataTemplate local:Results}" />
+        <ShellContent Title="Dist Normal"
+                      Icon="graph.png"
+                      ContentTemplate="{DataTemplate local:DistNormal}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="About"
+                Icon="question.png">
+        <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" />
+    </FlyoutItem>
+    
+</Shell>

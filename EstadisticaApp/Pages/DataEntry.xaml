@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:UraniumUI.Material.Controls;assembly=UraniumUI.Material"
+             xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+             xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+             xmlns:local="clr-namespace:EstadisticaApp.Models"
+             x:Class="EstadisticaApp.Pages.DataEntry"
+             x:Name="DataEntryPage"
+             Title="Carga de data">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:DataConverter x:Key="DataConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <local:DataGridPageViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <VerticalStackLayout Spacing="15"
+                         Padding="20">
+        <Label 
+            Text="Carga de data"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <HorizontalStackLayout  Spacing="5">
+            <Label Text="X:"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center" />
+            <Entry x:Name="dataX" 
+                   MaxLength="10" 
+                   Placeholder="valor x" 
+                   WidthRequest="100"
+                   Text="{Binding Item.X}"
+                   Keyboard="Numeric"/>
+            <Label Text="Y:"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center" />
+                <Entry x:Name="dataY"
+                       MaxLength="10"
+                       Placeholder="valor y"
+                       WidthRequest="100"
+                       Text="{Binding Item.Y}"
+                       Keyboard="Numeric">                   
+                </Entry>
+            
+
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="5">
+                <Button x:Name="AddButton"
+                        Text="Agregar"
+                        Command="{Binding AddNewCommand}" >
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource DataConverter}">
+                            <MultiBinding.Bindings>
+                                <Binding Path="Text"
+                                         Source="{x:Reference dataX}" />
+                                <Binding Path="Text"
+                                         Source="{x:Reference dataY}" />
+                            </MultiBinding.Bindings>                            
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+            <Button x:Name="LoadButton"
+                    Text="Cargar data"
+                        Command="{Binding LoadCommand}" />
+            <Button x:Name="ClearButton"
+                    Text="Limpiar data" Command="{Binding ClearCommand}" />
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="5" HorizontalOptions="FillAndExpand">
+                <ScrollView Orientation="Vertical">
+                    <controls:DataGrid ItemsSource="{Binding Items}"
+                                       SelectedItems="{Binding SelectedItems}"
+                                       HorizontalOptions="Center"
+                                   Margin="30">
+                    <controls:DataGrid.Columns>
+                            <controls:DataGridColumn PropertyName="Id"
+                                                     Title="ID" />
+                            <controls:DataGridColumn PropertyName="X"
+                                                     Title="X">
+                                <!--<controls:DataGridColumn.CellItemTemplate>
+                                    <DataTemplate>
+                                        <Frame BorderColor="Black"
+                                               BackgroundColor="Transparent"
+                                               Padding="5">
+                                            <Label Text="{Binding X}"
+                                                   TextColor="Blue" />
+                                        </Frame>
+                                    </DataTemplate>                                    
+                                </controls:DataGridColumn.CellItemTemplate>-->
+                            </controls:DataGridColumn>
+                            <controls:DataGridColumn PropertyName="Y"
+                                                     Title="Y">
+                                <!--<controls:DataGridColumn.CellItemTemplate>
+                                    <DataTemplate>
+                                        <Frame BorderColor="Black"
+                                               BackgroundColor="Transparent"
+                                               Padding="5">
+                                            <Label Text="{Binding Y}"
+                                                   TextColor="Blue" />
+                                        </Frame>
+                                    </DataTemplate>
+                                </controls:DataGridColumn.CellItemTemplate>-->
+                            </controls:DataGridColumn>
+                            <controls:DataGridColumn Title="Actions">
+                                <controls:DataGridColumn.CellItemTemplate>
+                                    <DataTemplate>
+                                        <Button Text="Eliminar"
+                                                Command="{Binding Source={x:Reference DataEntryPage}, Path=BindingContext.RemoveSelectedCommand}"
+                                                CommandParameter="{Binding Data}" />
+                                    </DataTemplate>
+                                </controls:DataGridColumn.CellItemTemplate>
+                            </controls:DataGridColumn>
+
+                        </controls:DataGrid.Columns>
+                </controls:DataGrid>
+            </ScrollView>            
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>
