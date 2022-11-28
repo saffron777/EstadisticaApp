@@ -2,52 +2,54 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="EstadisticaApp.Pages.Results"
-             xmlns:local="clr-namespace:EstadisticaApp.Models"
+             xmlns:local="clr-namespace:EstadisticaApp.Models"             
              Title="Results">
     <ContentPage.BindingContext>
-        <local:ResultsViewModel />
+        <local:ResultsViewModel />        
     </ContentPage.BindingContext>
-    
-    <VerticalStackLayout>
-        <Label 
-            Text="Resultados"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+    <ContentPage.Content>
+        <VerticalStackLayout>
+            <Label Text="Resultados"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center" />
 
-        <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsBusy}" >
-            <ScrollView Orientation="Vertical">
-                <CollectionView Margin="25"
-                                ItemsSource="{Binding Resultados}"  >
+            <RefreshView Command="{Binding RefreshCommand}"
+                         IsRefreshing="{Binding IsBusy}">
+                <ScrollView Orientation="Vertical">
+                    <CollectionView Margin="25"
+                                    ItemsSource="{Binding Resultados}">
 
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Padding="5"
-                                   CornerRadius="5"
-                                   IsClippedToBounds="False">
-                                <Grid ColumnDefinitions="*,*,*,*"
-                                      RowDefinitions="*">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="5"
+                                       CornerRadius="5"
+                                       IsClippedToBounds="False">
+                                    <Grid ColumnDefinitions="*,*,*,*"
+                                          RowDefinitions="*">
 
-                                    <Label Text="{Binding EtiquetaL}"
-                                           Grid.Row="0"
-                                           Grid.Column="0" />
-                                    <Label Text="{Binding ResultadoL}"
-                                           Grid.Row="0"
-                                           Grid.Column="1" />
-                                    <Label Text="{Binding Etiquetar}"
-                                           Grid.Row="0"
-                                           Grid.Column="2" />
-                                    <Label  Text="{Binding ResultadoR,TargetNullValue=''}"
-                                            Grid.Row="0"
-                                            Grid.Column="3" />
+                                        <Label Text="{Binding EtiquetaL}"
+                                               Grid.Row="0"
+                                               Grid.Column="0" />
+                                        <Label Text="{Binding ResultadoL}"
+                                               Grid.Row="0"
+                                               Grid.Column="1" />
+                                        <Label Text="{Binding Etiquetar}"
+                                               Grid.Row="0"
+                                               Grid.Column="2" />
+                                        <Label  Text="{Binding ResultadoR,TargetNullValue=''}"
+                                                Grid.Row="0"
+                                                Grid.Column="3" />
 
-                                </Grid>
+                                    </Grid>
 
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-
-                </CollectionView>
-            </ScrollView>            
-        </RefreshView>
-    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>                        
+                    </CollectionView>
+                </ScrollView>                
+            </RefreshView>
+        </VerticalStackLayout>
+        
+    </ContentPage.Content>
+   
 </ContentPage>

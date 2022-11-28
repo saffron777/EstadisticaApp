@@ -9,13 +9,14 @@ using System.Windows.Input;
 using MathNet.Numerics.Statistics;
 using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearRegression;
+using LiveChartsCore;
 
 //using static Android.Content.ClipData;
 
 namespace EstadisticaApp.Models
 {
-    public class ResultsViewModel: BindableObject
-    {
+    public class ResultsViewModel : BindableObject
+    {        
         public ICommand RefreshCommand { get; set; }
         private bool isBusy;
         public bool IsBusy { get => isBusy; set { isBusy = value; OnPropertyChanged(); } }
@@ -35,7 +36,7 @@ namespace EstadisticaApp.Models
         private void init()
         {
             datos = App.EstatisdicaRepository.GetDatos();
-            n = datos.Count();
+            n = datos.Count();          
 
             _resultados.Clear();
             Resultados = new ObservableCollection<Result>();

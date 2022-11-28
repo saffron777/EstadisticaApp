@@ -24,6 +24,9 @@
         <ShellContent Title="Resultados"
                       Icon="dashboard.png"
                       ContentTemplate="{DataTemplate local:Results}" />
+        <ShellContent Title="Grafico"
+                      Icon="stats_graph.png"
+                      ContentTemplate="{DataTemplate local:Graficos}" />
         <ShellContent Title="Dist Normal"
                       Icon="graph.png"
                       ContentTemplate="{DataTemplate local:DistNormal}" />

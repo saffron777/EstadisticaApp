@@ -76,6 +76,13 @@ namespace EstadisticaApp.Models
             set { _densidad = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Densidad))); }
         }
 
+        private double _muestra;
+
+        public double Muestra
+        {
+            get { return _muestra; }
+            set { _muestra = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Muestra))); }
+        }
 
         public ICommand NormalDistCommand { get; set; }
         public DistributionsViewModel() {
@@ -90,9 +97,15 @@ namespace EstadisticaApp.Models
             {
                 Normal normal = new(Media, DesviacionStandard);
 
-                Probabilidad = normal.CumulativeDistribution(Valor);
+                if (Valor != 0)
+                {
+                    Probabilidad = normal.CumulativeDistribution(Valor);
 
-                Densidad = normal.Density(Valor);
+                    Densidad = normal.Density(Valor);
+                }
+
+                if(Muestra!= 0) 
+                Pvalor = normal.InverseCumulativeDistribution(Muestra);
             });
 
         }

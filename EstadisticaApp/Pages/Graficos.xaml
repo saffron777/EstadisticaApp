@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EstadisticaApp.Pages.Graficos"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             xmlns:local="clr-namespace:EstadisticaApp.Models"
+             Title="Graficos">
+    <ContentPage.BindingContext>
+        <local:SerieViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <!--<RefreshView Command="{Binding RefreshCommand}"
+                     IsRefreshing="{Binding isBusy}">-->
+            <ScrollView Orientation="Vertical">
+                <Grid>
+                    <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Text="Resultados Graficos"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Start" />
+                <lvc:CartesianChart Grid.Row="1" Series="{Binding Series}">
+                    </lvc:CartesianChart>
+                <lvc:CartesianChart Grid.Row="2" Series="{Binding Seriesh}">
+                </lvc:CartesianChart>
+            </Grid>
+
+           
+        </ScrollView>
+        <!--</RefreshView>-->
+            
+        
+    </ContentPage.Content>
+</ContentPage>
