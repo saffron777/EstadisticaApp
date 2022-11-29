@@ -23,7 +23,7 @@
                        HorizontalOptions="Start" />
                 <lvc:CartesianChart Grid.Row="1" Series="{Binding Series}">
                     </lvc:CartesianChart>
-                <lvc:CartesianChart Grid.Row="2" Series="{Binding Seriesh}">
+                <lvc:CartesianChart Grid.Row="2" Series="{Binding SeriesHist}" LegendPosition="Right">
                 </lvc:CartesianChart>
             </Grid>
 

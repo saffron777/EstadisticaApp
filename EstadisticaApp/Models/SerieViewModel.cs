@@ -34,28 +34,28 @@ namespace EstadisticaApp.Models
             }
         };
 
-        public ISeries[] SeriesHist { get; set; } =
-    {
-        new ColumnSeries<double>
-        {
-            Name = "Mary",
-            Values = new double[] { 2, 5, 4 }
-        },
-        new ColumnSeries<double>
-        {
-            Name = "Ana",
-            Values = new double[] { 3, 1, 6 }
-        }
-    };
+        public ISeries[] SeriesHist { get; set; }  = Array.Empty<ISeries>();
+        //{
+        //    new ColumnSeries<double>
+        //    {
+        //        Name = "Mary",
+        //        Values = new double[] { 2, 5, 4 }
+        //    },
+        //    new ColumnSeries<double>
+        //    {
+        //        Name = "Ana",
+        //        Values = new double[] { 3, 1, 6 }
+        //    }
+        //};
 
         public Axis[] XAxes { get; set; } =
         {
-        new Axis
-        {
-            Labels = new string[] { "Category 1", "Category 2", "Category 3" },
-            LabelsRotation = 15
-        }
-    };
+            new Axis
+            {
+                Labels = new string[] { "X", "Y" },
+                LabelsRotation = 15
+            }
+        };
 
         //    public ISeries[] Series { get; set; } =
         //{
@@ -116,6 +116,23 @@ namespace EstadisticaApp.Models
             {
                 _series.Add(serie);
                 Series = _series.ToArray();
+
+
+                serie = new ScatterSeries<ObservablePoint>();
+                values = new ObservableCollection<ObservablePoint>();
+
+                var columnX = new ColumnSeries<double>();
+                columnX.Name = "x";
+                columnX.Values = datos.Select(x => (double)x.X).ToArray();
+
+
+                var columnY = new ColumnSeries<double>();
+                columnY.Name = "y";
+                columnY.Values = datos.Select(x => (double)x.Y).ToArray();
+
+                
+                SeriesHist = new ISeries[] { columnX, columnY };
+                
             }
             catch (Exception ex)
             {
