@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:local="clr-namespace:EstadisticaApp.Models"               
+               x:Class="EstadisticaApp.Pages.ConfigRandonDataPopup">
+
+
+    <toolkit:Popup.BindingContext>
+        <local:DataGridPageViewModel />
+    </toolkit:Popup.BindingContext>
+    <VerticalStackLayout>
+        <HorizontalStackLayout>
+            <Label Text="Tamaño Muestral" />
+            <Entry x:Name="Muestra"
+                   MaxLength="10"
+                   Text="{Binding Muestra}"
+                   Placeholder="muestra"
+                   WidthRequest="100"
+                   Keyboard="Numeric" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout>
+            <Label Text="Valor minimo:" />
+            <Entry x:Name="MinVal"
+                   MaxLength="10"
+                   Text="{Binding Min}"
+                   Placeholder="valor minimo"
+                   WidthRequest="100"
+                   Keyboard="Numeric" />
+            <Label Text="Valor maximo:" />
+            <Entry x:Name="MaxVal"
+                   MaxLength="10"
+                   Text="{Binding Max}"
+                   Placeholder="valor maximo"
+                   WidthRequest="100"
+                   Keyboard="Numeric" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout>
+            <Button x:Name="btnOk"
+                    Text="OK"
+                    Command="{Binding RndCommand}"
+                    Clicked="OnOKButtonClicked">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{local:RndDataConverter}">
+                        <Binding Path="Text"
+                                 Source="{x:Reference Muestra}" />
+                        <Binding Path="Text"
+                                 Source="{x:Reference MinVal}" />
+                        <Binding Path="Text"
+                                 Source="{x:Reference MaxVal}" />
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <Button Text="Cancelar"
+                    Clicked="OnCancelButtonClicked" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+
+</toolkit:Popup>

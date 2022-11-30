@@ -29,7 +29,10 @@ namespace EstadisticaApp.Models
 
             RefreshCommand = new Command(() =>
             {
-                init();               
+                init();            
+                
+                SerieViewModel serieViewModel = new SerieViewModel();
+                serieViewModel.Refresh();
             });
         }
 
@@ -53,8 +56,8 @@ namespace EstadisticaApp.Models
             var mediax = (double)datos.Average(x => x.X);
             var mediay = (double)datos.Average(x => x.Y);
 
-            result.Add("Media X =", mediax);
-            result.Add("Media Y =", mediay);
+            result.Add("Media X =", Math.Round(mediax, 3));
+            result.Add("Media Y =", Math.Round(mediay,3));
 
             return result;
         }
@@ -78,8 +81,8 @@ namespace EstadisticaApp.Models
 
             var vari = varianzas();
 
-            result.Add("Desv X =",Math.Sqrt(vari[0]));
-            result.Add("Desv Y =", Math.Sqrt(vari[1]));
+            result.Add("Desv X =", Math.Round(Math.Sqrt(vari[0]),3));
+            result.Add("Desv Y =", Math.Round(Math.Sqrt(vari[1]),3));
 
 
             return result;
@@ -100,7 +103,7 @@ namespace EstadisticaApp.Models
             });
             varx /= n;
 
-            result.Add(varx);
+            result.Add(Math.Round(varx,3));
 
             double vary = 0;
             datos.ForEach(x => {
@@ -110,7 +113,7 @@ namespace EstadisticaApp.Models
             });
             vary /= n;
 
-            result.Add(vary);
+            result.Add(Math.Round(vary,3));
 
             return result;
         }
@@ -138,6 +141,33 @@ namespace EstadisticaApp.Models
 
             result.Add("SUM X^2 =", sumax2);
             result.Add("SUM Y^2 =", sumay2);
+
+            return result;
+        }
+
+        private Dictionary<string, double> Max()
+        {
+            Dictionary<string, double> result = new Dictionary<string, double>();
+
+            var maxx = (double)datos.Max(x => x.X);
+            var maxy = (double)datos.Max(x => x.Y);
+
+            result.Add("Max X =", maxx);
+            result.Add("Max Y =", maxy);
+
+            return result;
+        }
+
+
+        private Dictionary<string, double> Min()
+        {
+            Dictionary<string, double> result = new Dictionary<string, double>();
+
+            var maxx = (double)datos.Min(x => x.X);
+            var maxy = (double)datos.Min(x => x.Y);
+
+            result.Add("Min X =", maxx);
+            result.Add("Min Y =", maxy);
 
             return result;
         }
@@ -178,7 +208,7 @@ namespace EstadisticaApp.Models
 
             var cov = (sumxy / n) - mediax * mediay;
 
-            return cov;
+            return Math.Round(cov,4);
         }
 
 
@@ -200,7 +230,7 @@ namespace EstadisticaApp.Models
 
             var pear = pearson();
 
-            result.Add("Pearson =", pear);
+            result.Add("Pearson =", Math.Round(pear, 4));
 
             return result;
         }
@@ -228,8 +258,8 @@ namespace EstadisticaApp.Models
             var mediay = m_y.Median();
 
             
-            result.Add("MEDIANA X =", mediax);
-            result.Add("MEDIANA Y =", mediay);
+            result.Add("MEDIANA X =", Math.Round(mediax, 3));
+            result.Add("MEDIANA Y =", Math.Round(mediay,3));
 
             return result;
         }
@@ -247,6 +277,22 @@ namespace EstadisticaApp.Models
             return result;
         }
 
+
+        private Dictionary<string, double> Percentil(int n)
+        {
+            Dictionary<string, double> result = new Dictionary<string, double>();
+
+            var m_x = datos.Select(x => (double)x.X).AsEnumerable();
+            var m_y = datos.Select(x => (double)x.Y).AsEnumerable();
+
+            var px = m_x.Percentile(n);
+            var py = m_y.Percentile(n);
+
+            result.Add($"PERCENTIL({n}) X =", Math.Round(px, 3));
+            result.Add($"PERCENTIL({n}) Y =", Math.Round(py,3));
+
+            return result;
+        }
         private void Calcular()
         {
            
@@ -258,8 +304,12 @@ namespace EstadisticaApp.Models
             Dictionary<string, Dictionary<string, double>> results = new Dictionary<string, Dictionary<string, double>>();
 
             results.Add("TOTAL", Total());
+            results.Add("MIN", Min());
+            results.Add("MAX", Max());
             results.Add("MEDIA", Media());
             results.Add("MEDIANA", Mediana());
+            results.Add("PERCENTIL25", Percentil(25));
+            results.Add("PERCENTIL75", Percentil(75));
             results.Add("VAR", Varianza());
             results.Add("DESV", Desviacion());
             results.Add("SUM", Suma());
@@ -285,13 +335,53 @@ namespace EstadisticaApp.Models
                         ResultadoR = dic_i["Media Y ="]
                     });
                 }
+                else if(dic.Key=="MIN")
+                {
+                    Resultados.Add(new Result
+                    {
+                        EtiquetaL = "Min X = ",
+                        ResultadoL = dic_i["Min X ="],
+                        Etiquetar = "Min Y = ",
+                        ResultadoR = dic_i["Min Y ="]
+                    });
+                }
+                else if (dic.Key == "MAX")
+                {
+                    Resultados.Add(new Result
+                    {
+                        EtiquetaL = "Max X = ",
+                        ResultadoL = dic_i["Max X ="],
+                        Etiquetar = "Max Y = ",
+                        ResultadoR = dic_i["Max Y ="]
+                    });
+                }
+                else if (dic.Key == "PERCENTIL25")
+                {
+                    Resultados.Add(new Result
+                    {
+                        EtiquetaL = "QUARTIL 1 X = ",
+                        ResultadoL = dic_i["PERCENTIL(25) X ="],
+                        Etiquetar = "QUARTIL 1 Y = ",
+                        ResultadoR = dic_i["PERCENTIL(25) Y ="]
+                    });
+                }
+                else if (dic.Key == "PERCENTIL75")
+                {
+                    Resultados.Add(new Result
+                    {
+                        EtiquetaL = "QUARTIL 3 X = ",
+                        ResultadoL = dic_i["PERCENTIL(75) X ="],
+                        Etiquetar = "QUARTIL 3 Y = ",
+                        ResultadoR = dic_i["PERCENTIL(75) Y ="]
+                    });
+                }
                 else if (dic.Key == "MEDIANA")
                 {
                     Resultados.Add(new Result
                     {
                         EtiquetaL = "MEDIANA X =",
                         ResultadoL = dic_i["MEDIANA X ="],
-                        Etiquetar = "MEDIANA y =",
+                        Etiquetar = "MEDIANA Y =",
                         ResultadoR = dic_i["MEDIANA Y ="]
                     });
                 }
@@ -301,7 +391,7 @@ namespace EstadisticaApp.Models
                     {
                         EtiquetaL = "Var X =",
                         ResultadoL = dic_i["Var X ="],
-                        Etiquetar = "Var y =",
+                        Etiquetar = "Var Y =",
                         ResultadoR = dic_i["Var Y ="]
                     });
                 }

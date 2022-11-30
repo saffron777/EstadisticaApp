@@ -6,4 +6,9 @@ public partial class DataEntry : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void AddButton_Clicked(object sender, EventArgs e)
+    {
+		
+    }
 }

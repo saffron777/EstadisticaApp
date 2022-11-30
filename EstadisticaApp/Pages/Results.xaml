@@ -15,7 +15,7 @@
 
             <RefreshView Command="{Binding RefreshCommand}"
                          IsRefreshing="{Binding IsBusy}">
-                <ScrollView Orientation="Vertical">
+                <ScrollView VerticalScrollBarVisibility="Always">
                     <CollectionView Margin="25"
                                     ItemsSource="{Binding Resultados}">
 
@@ -30,13 +30,13 @@
                                         <Label Text="{Binding EtiquetaL}"
                                                Grid.Row="0"
                                                Grid.Column="0" />
-                                        <Label Text="{Binding ResultadoL}"
+                                        <Label Text="{Binding ResultadoL, StringFormat='{0:F2}'}"
                                                Grid.Row="0"
                                                Grid.Column="1" />
                                         <Label Text="{Binding Etiquetar}"
                                                Grid.Row="0"
                                                Grid.Column="2" />
-                                        <Label  Text="{Binding ResultadoR,TargetNullValue=''}"
+                                        <Label  Text="{Binding ResultadoR, StringFormat='{0:F2}',TargetNullValue=''}"
                                                 Grid.Row="0"
                                                 Grid.Column="3" />
 

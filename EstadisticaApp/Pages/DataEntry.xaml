@@ -29,12 +29,13 @@
             <Label Text="X:"
                    VerticalOptions="Center"
                    HorizontalOptions="Center" />
-            <Entry x:Name="dataX" 
-                   MaxLength="10" 
-                   Placeholder="valor x" 
-                   WidthRequest="100"
-                   Text="{Binding Item.X}"
-                   Keyboard="Numeric"/>
+                <Entry x:Name="dataX"
+                       MaxLength="10"
+                       Placeholder="valor x"
+                       WidthRequest="100"
+                       Text="{Binding Item.X, Mode=TwoWay}"
+                       Keyboard="Numeric">                    
+                </Entry>
             <Label Text="Y:"
                    VerticalOptions="Center"
                    HorizontalOptions="Center" />
@@ -42,7 +43,7 @@
                        MaxLength="10"
                        Placeholder="valor y"
                        WidthRequest="100"
-                       Text="{Binding Item.Y}"
+                       Text="{Binding Item.Y, Mode=TwoWay}"
                        Keyboard="Numeric">                   
                 </Entry>
             
@@ -52,8 +53,9 @@
         <HorizontalStackLayout Spacing="5">
                 <Button x:Name="AddButton"
                         Text="Agregar"
-                        Command="{Binding AddNewCommand}" >
-                    <Button.CommandParameter>
+                        Command="{Binding AddNewCommand}" 
+                        >
+                    <Button.CommandParameter>   
                         <MultiBinding Converter="{StaticResource DataConverter}">
                             <MultiBinding.Bindings>
                                 <Binding Path="Text"
@@ -63,23 +65,39 @@
                             </MultiBinding.Bindings>                            
                         </MultiBinding>
                     </Button.CommandParameter>
-                </Button>
-            <Button x:Name="LoadButton"
+                </Button>                
+                <Button x:Name="LoadButton"
                     Text="Cargar data"
                         Command="{Binding LoadCommand}" />
             <Button x:Name="ClearButton"
                     Text="Limpiar data" Command="{Binding ClearCommand}" />
         </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Button x:Name="RndButton"
+                        Text="Data Aleatoria"
+                        Command="{Binding PopupCommand}" />
+            </HorizontalStackLayout>
 
         <HorizontalStackLayout Spacing="5" HorizontalOptions="FillAndExpand">
-                <ScrollView Orientation="Vertical">
+                <ScrollView VerticalScrollBarVisibility="Always">
                     <controls:DataGrid ItemsSource="{Binding Items}"
-                                       SelectedItems="{Binding SelectedItems}"
-                                       HorizontalOptions="Center"
+                                       SelectedItems="{Binding SelectedItems}"                                            
+                                       HorizontalOptions="Center" 
                                    Margin="30">
-                    <controls:DataGrid.Columns>
-                            <controls:DataGridColumn PropertyName="Id"
-                                                     Title="ID" />
+                        <controls:DataGrid.EmptyView>
+                            <VerticalStackLayout Margin="80,20">
+                                <Image WidthRequest="40"
+                                       HeightRequest="40"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       Source="{FontImageSource FontFamily=MaterialOutlined, Glyph={x:Static m:MaterialOutlined.Backup_table}, Color={AppThemeBinding Light={StaticResource OnSurface}, Dark={StaticResource OnSurfaceDark}}}" />
+                                <Label Text="No data available..."
+                                       HorizontalOptions="Center" />
+                            </VerticalStackLayout>                                
+                        </controls:DataGrid.EmptyView>
+                    <controls:DataGrid.Columns>                        
+                            <!--<controls:DataGridColumn PropertyName="Id"
+                                                     Title="ID"  />-->
                             <controls:DataGridColumn PropertyName="X"
                                                      Title="X">
                                 <!--<controls:DataGridColumn.CellItemTemplate>

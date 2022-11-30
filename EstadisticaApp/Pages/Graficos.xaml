@@ -11,19 +11,24 @@
     <ContentPage.Content>
         <!--<RefreshView Command="{Binding RefreshCommand}"
                      IsRefreshing="{Binding isBusy}">-->
-            <ScrollView Orientation="Vertical">
+        <ScrollView VerticalScrollBarVisibility="Always">
                 <Grid>
                     <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />                        
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Text="Resultados Graficos"
-                       VerticalOptions="Center"
-                       HorizontalOptions="Start" />
+                       VerticalOptions="Start"
+                       HorizontalOptions="Center" />
                 <lvc:CartesianChart Grid.Row="1" Series="{Binding Series}">
                     </lvc:CartesianChart>
                 <lvc:CartesianChart Grid.Row="2" Series="{Binding SeriesHist}" LegendPosition="Right">
+                </lvc:CartesianChart>
+                <lvc:CartesianChart Grid.Row="3"
+                                    Series="{Binding SeriesCandle}"
+                                    LegendPosition="Right">
                 </lvc:CartesianChart>
             </Grid>
 

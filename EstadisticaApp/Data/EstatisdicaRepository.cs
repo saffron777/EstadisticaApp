@@ -99,8 +99,9 @@ namespace EstadisticaApp.Data
             {
                 Init();
                 
-               result = conn.Table<Dato>().Delete();
-                
+               result = conn.DeleteAll<Dato>();
+                conn.Execute($"UPDATE sqlite_sequence SET seq=0 WHERE name = 'Dato'");
+                conn.Commit();
             }
             catch (Exception ex)
             {

@@ -1,9 +1,13 @@
-﻿using System;
+﻿using CommunityToolkit.Maui.Views;
+using EstadisticaApp.Pages;
+using MathNet.Numerics.Random;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -23,14 +27,51 @@ namespace EstadisticaApp.Models
 
         public ICommand AddNewCommand { get; set; }
 
+        public ICommand RndCommand { get; set; }
+
+        public ICommand PopupCommand { get; set; }
+
         public ICommand UpdateCommand { get; set; }
 
         public ICommand LoadCommand { get; set; }
 
         public ICommand ClearCommand { get; set; }
 
-        public DataViewModel Item { get; set; }
+        public DataViewModel Item { get; set; } = new DataViewModel();               
+
         public int Row { get; set; }
+
+        private int _muestra;
+        public int Muestra { 
+            get => _muestra; 
+            set 
+            { 
+                _muestra = value;
+                OnPropertyChanged(nameof(Muestra));
+            } 
+        }
+
+        private double _min;
+        public double Min
+        {
+            get => _min;
+            set
+            {
+                _min = value;
+                OnPropertyChanged(nameof(Min));
+            }
+        }
+
+        private double _max;
+        public double Max
+        {
+            get => _max;
+            set
+            {
+                _max = value;
+                OnPropertyChanged(nameof(Max));
+            }
+        }
 
         protected void Initialize()
         {
@@ -65,6 +106,50 @@ namespace EstadisticaApp.Models
                 App.EstatisdicaRepository.ClearData();
             });
 
+            RndCommand = new Command((n) =>
+            {
+                                
+                if (n is RndDataModel obj)
+                {
+                    Items.Clear();
+                    App.EstatisdicaRepository.ClearData();
+
+                    for (int i = 1; i <= obj.Muestra; i++)
+                    {
+                        var random = new Random();
+                        var rndX = random.NextDecimal() * (decimal)(obj.Max - obj.Min) + (decimal)obj.Min;
+                        var rndY = random.NextDecimal() * (decimal)(obj.Max - obj.Min) + (decimal)obj.Min;
+
+                        App.EstatisdicaRepository.AddNewData(Math.Round(rndX,2), Math.Round(rndY,2));
+
+                        int maxId = 0;
+                        var registros = App.EstatisdicaRepository.GetDatos();
+                        if (registros.Count > 0)
+                            maxId = registros.Max(x => x.Id);
+
+                        Items.Insert(Row, new DataViewModel
+                        {
+                            Id = maxId,
+                            X = Math.Round(rndX,2),
+                            Y = Math.Round(rndY,2),
+                        });
+                    }
+                   
+                }
+            });
+
+            PopupCommand = new Command(async (item) =>
+            {
+                ConfigRandonDataPopup popup = new ConfigRandonDataPopup();
+
+                var result = await Application.Current.MainPage.ShowPopupAsync<ConfigRandonDataPopup>(popup);
+
+                if(result  is Boolean bResult)
+                {
+                    Initialize();
+                }
+            });
+
             LoadCommand = new Command(() =>
             {
                 Initialize();
@@ -87,6 +172,11 @@ namespace EstadisticaApp.Models
                         X = data.X,
                         Y = data.Y,
                     });
+
+                    Item.X = null;
+                    Item.Y= null;
+
+
                 }                    
             });
 
@@ -137,6 +227,69 @@ namespace EstadisticaApp.Models
         }
     }
 
+    public class RndDataConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            
+            if (values[0] != null && values[1] != null && values[2] != null && (!string.IsNullOrWhiteSpace(values[0].ToString()) && !string.IsNullOrWhiteSpace(values[1].ToString()) && !string.IsNullOrWhiteSpace(values[2].ToString())) && values.Length == 3)
+            {
+                int muestra ;
+                double min ;
+                double max ;
+
+                int.TryParse(values[0].ToString(), out muestra);
+                double.TryParse(values[1].ToString(), out min);
+                double.TryParse(values[2].ToString(), out max);
+
+
+                return new RndDataModel { Muestra = muestra, Min = min, Max = max };
+            }
+            return null;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class RndDataModel
+    {
+        private int _muestra;
+        public int Muestra
+        {
+            get => _muestra;
+            set
+            {
+                _muestra = value;
+               
+            }
+        }
+
+        private double _min;
+        public double Min
+        {
+            get => _min;
+            set
+            {
+                _min = value;
+               
+            }
+        }
+
+        private double _max;
+        public double Max
+        {
+            get => _max;
+            set
+            {
+                _max = value;
+               
+            }
+        }
+    }
+
     public class DataViewModel:INotifyPropertyChanged
     {
         private int _id;
@@ -153,7 +306,7 @@ namespace EstadisticaApp.Models
             } 
         }
 
-        private decimal? _x;
+        private decimal? _x = null;
         public decimal? X 
         { 
             get => _x;
@@ -168,7 +321,7 @@ namespace EstadisticaApp.Models
         }
 
 
-        private decimal? _y;
+        private decimal? _y = null;
 
         public decimal? Y 
         { 
