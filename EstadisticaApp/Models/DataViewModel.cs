@@ -146,6 +146,7 @@ namespace EstadisticaApp.Models
 
                 if(result  is Boolean bResult)
                 {
+                    if(bResult) 
                     Initialize();
                 }
             });
@@ -197,8 +198,13 @@ namespace EstadisticaApp.Models
                 }
             });
 
-            RemoveSelectedCommand = new Command((item) =>
+            RemoveSelectedCommand = new Command(async (item) =>
             {
+                var result = await App.Current.MainPage.DisplayAlert("Aviso", "Desea eliminar el registro?", "Si","No");
+
+                if (!result)
+                    return;
+
                 if (item is DataViewModel data)
                 {
                     items.Remove(data);
